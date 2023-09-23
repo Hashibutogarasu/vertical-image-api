@@ -1,6 +1,5 @@
-import { Button, Group, LoadingOverlay, Paper, ScrollArea } from "@mantine/core";
+import { LoadingOverlay, Paper, ScrollArea } from "@mantine/core";
 import { FileWithPath } from "@mantine/dropzone";
-import { useDisclosure } from "@mantine/hooks";
 
 const fileList = (files: FileWithPath[]): React.JSX.Element[] => (
     (files) ? files.map((file) => {

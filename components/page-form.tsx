@@ -1,5 +1,5 @@
 import { useRef, useState } from 'react';
-import { Box, Button, Center, Code, CopyButton, Group, Modal, Paper, Space, Stack, Text } from '@mantine/core';
+import { Button, Center, Code, CopyButton, Group, Modal, Paper, Space, Stack, Text } from '@mantine/core';
 import { Dropzone, FileWithPath } from '@mantine/dropzone';
 import { useDisclosure } from '@mantine/hooks';
 import { VerticalAPIErrorResponse, VerticalAPIRequest, VerticalAPIResponse } from '../types/verticalresponse';
