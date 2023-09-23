@@ -1,12 +1,12 @@
 import { useRef, useState } from 'react';
-import { Button, Center, Code, CopyButton, Group, Modal, Paper, Space, Stack, Text } from '@mantine/core';
+import { Button, Center, Code, CopyButton, Group, LoadingOverlay, Modal, Paper, ScrollArea, Space, Stack, Text } from '@mantine/core';
 import { Dropzone, FileWithPath } from '@mantine/dropzone';
 import { useDisclosure } from '@mantine/hooks';
 import { VerticalAPIErrorResponse, VerticalAPIRequest, VerticalAPIResponse } from '../types/verticalresponse';
 import path from 'path';
 import imageInfo from "base64image-dimensions";
 import SendURL from './SendURL';
-import FilesScrollList from './filesScrollList';
+import { fileList } from './utils';
 
 export default function PageForm() {
     const openRef = useRef<() => void>(null);
@@ -92,7 +92,12 @@ export default function PageForm() {
                         </div>
 
                         <SendURL visible={loading} />
-                        <FilesScrollList files={files} visible={loading} />
+                        {(files && !files.includes(undefined)) ? <Paper shadow="xs" p="xl">
+                            <ScrollArea h={400}>
+                                <LoadingOverlay visible={visible} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
+                                <ul>{fileList(files)}</ul>
+                            </ScrollArea>
+                        </Paper> : <></>}
                     </Paper>
                 </Stack>
                 <Group justify="right" mt="md">
