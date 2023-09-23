@@ -5,14 +5,17 @@
   "author": "Hashibutogarasu",
   "description": "Generate Minecraft animated texture from images",
   "main": "main/index.js",
+  "homepage": "https://hashibutogarasu.github.io/vertical-image-api/",
   "private": true,
   "scripts": {
     "dev": "next",
+    "export": "next export",
     "build": "next build",
     "start": "next start",
     "dev-electron": "tsc -p electron-src && electron .",
     "dist": "next build && next export && tsc -p electron-src && electron-builder",
-    "deploy": "gh-pages -d build"
+    "deploy": "npm run build && npm run export && gh-pages -d out",
+    "eject": "react-scripts eject"
   },
   "dependencies": {
     "@mantine/core": "^7.0.0",
