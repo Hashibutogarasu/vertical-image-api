@@ -3,6 +3,7 @@ import { FileInfo, VerticalAPIErrorResponse, VerticalAPIRequest, VerticalAPIResp
 import * as fs from 'fs'
 import { Statics } from '../../../../components/statics';
 
+
 export default function handler(
     req: NextApiRequest,
     res: NextApiResponse<VerticalAPIResponse | VerticalAPIErrorResponse>

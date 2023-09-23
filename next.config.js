@@ -1,9 +1,9 @@
-const branchName = process.env.BRANCH_NAME ? "/" + process.env.BRANCH_NAME : "";
+const urlPrefix = process.env.URL_PREFIX ? '/' + process.env.URL_PREFIX : ''
 
 const nextConfig = {
     reactStrictMode: true,
-    assetPrefix: branchName,
-    basePath: "hashibutogarasu.github.io/vertical-image-api",
+    assetPrefix: urlPrefix,
+    basePath: urlPrefix,
     swcMinify: true,
     images: {
         unoptimized: true,

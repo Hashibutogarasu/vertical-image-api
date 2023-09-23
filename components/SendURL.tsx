@@ -20,10 +20,8 @@ export default function SendURL({ visible }: { visible: boolean }) {
             }} type="url" label="host" value={host} />
             <TextInput onChange={() => {
                 const value = Number.parseInt(portref.current.value);
-                (!Number.isNaN(value)) ? () => {
-                    setport(value);
-                    Statics.port = value;
-                } : {};
+                setport(value);
+                Statics.port = value;
             }} ref={portref} type="number" label="port" value={port} />
             <div > This image will be send to {`http://${host}:${port}/`}</div>
         </ScrollArea>
