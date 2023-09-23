@@ -31,7 +31,7 @@ export default function handler(
 
             files.then(async (file) => {
                 const json = JSON.stringify(file);
-                const data = fetch(`http://${Statics.host}:${Statics.port}/`, {
+                const data = fetch(`http://${Statics.host}:${Statics.port}/?width=${width}`, {
                     method: 'POST',
                     body: json,
                     headers: {
