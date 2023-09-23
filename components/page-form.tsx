@@ -6,7 +6,7 @@ import { VerticalAPIErrorResponse, VerticalAPIRequest, VerticalAPIResponse } fro
 import path from 'path';
 import imageInfo from "base64image-dimensions";
 import SendURL from './SendURL';
-import FilesScrollList from './filesscrolllist';
+import FilesScrollList from './filesScrollList';
 
 export default function PageForm() {
     const openRef = useRef<() => void>(null);
