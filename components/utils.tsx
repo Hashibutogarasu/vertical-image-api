@@ -1,3 +1,5 @@
+import { FileWithPath } from "@mantine/dropzone";
+
 async function cvtObjURLToImage(
     objURL: ReturnType<typeof URL.createObjectURL>
 ) {
@@ -38,8 +40,30 @@ async function cvtDataURL2File(
     return new File([blob], filename);
 }
 
+function fileList(files: FileWithPath[]): React.JSX.Element[] {
+    return (files) ? files.map((file) => {
+        (async () => {
+            const uint8Array = Array.from<number>(new Uint8Array(await file.arrayBuffer()));
+            let encodedStr = '';
+
+            for (let i = 0; i < uint8Array.length; i += 1024) {
+                encodedStr += String.fromCharCode.apply(
+                    null, uint8Array.slice(i, i + 1024)
+                );
+            }
+
+            const base64 = window.btoa(encodedStr);
+        });
+
+        return (file) ? <li key={file.path}>
+            {file.path} - {file.size} bytes
+        </li> : <div key={undefined}></div>
+    }) : [];
+}
+
 export {
     cvtObjURLToImage,
     cvtHTMLImageElement2Canvas,
     cvtDataURL2File,
+    fileList
 }
