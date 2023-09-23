@@ -27,6 +27,9 @@ concurrency:
 jobs:
   # Build job
   build:
+    environment: github-pages
+    env:
+      BRANCH_NAME: ${{ vars.BRANCH_NAME }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
