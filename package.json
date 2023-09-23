@@ -11,7 +11,8 @@
     "build": "next build",
     "start": "next start",
     "dev-electron": "tsc -p electron-src && electron .",
-    "dist": "next build && next export && tsc -p electron-src && electron-builder"
+    "dist": "next build && next export && tsc -p electron-src && electron-builder",
+    "deploy": "gh-pages -d build"
   },
   "dependencies": {
     "@mantine/core": "^7.0.0",
