@@ -1,27 +1,22 @@
-# Basic API routes example
+# vertical image api
 
-Next.js ships with [API routes](https://nextjs.org/docs/api-routes/introduction) which provides an easy solution to build your own `API`. This example shows how to create multiple `API` endpoints with serverless functions, which can execute independently.
+Minecraftのアニメーションテクスチャーを作成する時、手動で縦に並べるのが面倒だったので画像を生成するwebアプリケーションを作りました
 
-## Deploy your own
 
-Deploy the example using [Vercel](https://vercel.com?utm_source=github&utm_medium=readme&utm_campaign=next-example) or preview live with [StackBlitz](https://stackblitz.com/github/vercel/next.js/tree/canary/examples/api-routes)
+必須：[vertical image api java ](https://github.com/Hashibutogarasu/vertical-image-api-java)
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/vercel/next.js/tree/canary/examples/api-routes&project-name=api-routes&repository-name=api-routes)
+## TODO
 
-## How to use
+- [ ] 生成したファイルと一緒にflipbook_textures.jsonも生成
 
-Execute [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init), [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/), or [pnpm](https://pnpm.io) to bootstrap the example:
+### How to run
 
-```bash
-npx create-next-app --example api-routes api-routes-app
+```
+npm run dev
 ```
 
-```bash
-yarn create next-app --example api-routes api-routes-app
-```
+### How to build
 
-```bash
-pnpm create next-app --example api-routes api-routes-app
 ```
-
-Deploy it to the cloud with [Vercel](https://vercel.com/new?utm_source=github&utm_medium=readme&utm_campaign=next-example) ([Documentation](https://nextjs.org/docs/deployment)).
+npm run build
+```
