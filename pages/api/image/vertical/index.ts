@@ -13,6 +13,9 @@ export default function handler(
         const width = json.width;
         const data = json.data;
 
+        res.setHeader('Content-Type', 'application/json');
+        res.setHeader('Cache-Control', 'max-age=180000');
+
         if (data) {
             const files = Promise.all(data.map(async (value) => {
                 const fileData = value.data.replace(/^data:\w+\/\w+;base64,/, '');
@@ -30,29 +33,40 @@ export default function handler(
             }));
 
             files.then(async (file) => {
-                const json = JSON.stringify(file);
-                const data = fetch(`http://${Statics.host}:${Statics.port}/?width=${width}`, {
+                const data = await fetch(`http://${Statics.host}:${Statics.port}/`, {
                     method: 'POST',
-                    body: json,
-                    headers: {
-                        width: width.toString()
-                    }
+                    body: JSON.stringify({
+                        data: file,
+                        width: width,
+                    }),
                 });
-                const result = JSON.parse(await (await data).text()) as VerticalAPIResponse;
-                res.status(200).json(result);
+
+                const text = await data.text();
+
+                const result = JSON.parse(text) as VerticalAPIResponse;
+
+                res.status(200);
+                res.json(result);
+                res.end();
+
+                return;
             }).catch((error) => {
-                res.status(500).json({
-                    message: error.message,
+                res.status(500);
+                res.end({
                     status: 500,
+                    message: error.message,
                 });
             });
+
+            return;
         }
     }
     else {
-        res.status(204).json({
+        res.statusCode = 204;
+        res.end({
             status: 204,
-            message: 'failed to generate image',
+            message: "failed to generate image",
         });
-        res.end();
     }
+
 }

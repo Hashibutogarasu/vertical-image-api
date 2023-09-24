@@ -1,10 +1,17 @@
 import { LoadingOverlay, ScrollArea, TextInput } from "@mantine/core";
 import { useRef, useState } from "react";
 import { Statics } from "./statics";
+import { useLocalStorage } from "@mantine/hooks";
 
 export default function SendURL({ visible }: { visible: boolean }) {
-    const [host, sethost] = useState<string>("localhost");
-    const [port, setport] = useState<number>(8080);
+    const [host, sethost] = useLocalStorage({
+        key: 'host',
+        defaultValue: 'localhost',
+    });
+    const [port, setport] = useLocalStorage({
+        key: 'port',
+        defaultValue: 8080,
+    });
     const hostref = useRef<HTMLInputElement>(null);
     const portref = useRef<HTMLInputElement>(null);
 
