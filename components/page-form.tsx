@@ -87,7 +87,7 @@ export default function PageForm() {
                                 onfilesdrop(value, files, isadd);
                             }}>
                                 <Paper shadow="xs" p="xl">
-                                    Drag images here or click to select files
+                                    Drag images here or click to add files
                                     <br />
                                     (supported only <strong>png</strong> files)
                                 </Paper>
