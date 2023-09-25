@@ -10,6 +10,7 @@ import { fileList } from './utils';
 
 export default function PageForm() {
     const openRef = useRef<() => void>(null);
+    const [pngfiles, setpngfiles] = useState<FileWithPath[]>([]);
     const [files, setfiles] = useState<FileWithPath[]>(undefined);
     const [loading, setloading] = useState<boolean>(false);
 
@@ -19,11 +20,59 @@ export default function PageForm() {
     const [visible, setVisible] = useState(false);
     const [status, setStatus] = useState<VerticalAPIResponse>(undefined);
     const [apistatus, setapiStatus] = useState<number>(undefined);
+    const [isadd, setadd] = useState<boolean>(false);
     const [error, seterror] = useState<VerticalAPIErrorResponse>({
         message: 'none',
         status: 204,
     })
     const [opened, { open, close }] = useDisclosure(false);
+
+    async function onfilesdrop(files: FileWithPath[], current: FileWithPath[], add: boolean) {
+        const mappedfiles = files.map((value) => {
+            const ext = path.extname(value.path);
+            if (ext === '.png') {
+                return value;
+            }
+        });
+
+        mappedfiles.forEach((mappedfile) => {
+            if (mappedfile != undefined) {
+                pngfiles.push(mappedfile);
+            }
+        });
+
+        const images = await Promise.all(pngfiles.map(async (file) => {
+            if (file) {
+                const uint8Array = Array.from<number>(new Uint8Array(await file.arrayBuffer()));
+                let encodedStr = '';
+
+                for (let i = 0; i < uint8Array.length; i += 1024) {
+                    encodedStr += String.fromCharCode.apply(
+                        null, uint8Array.slice(i, i + 1024)
+                    );
+                }
+
+                const base64 = window.btoa(encodedStr);
+
+                let info = imageInfo(base64);
+
+                return {
+                    name: file.name,
+                    data: `data:image/png;base64,${base64}`,
+                    width: info.width
+                };
+            }
+        }));
+
+        const json: VerticalAPIRequest = {
+            data: images,
+            length: images?.length,
+            width: images[0]?.width ?? 16,
+        };
+
+        setfiles(pngfiles);
+        setjsondata(json);
+    }
 
     return (
         <Center>
@@ -34,54 +83,8 @@ export default function PageForm() {
                         <div style={{
                             width: 500
                         }}>
-                            {!(loading) ? <Dropzone openRef={openRef} onDrop={async (values) => {
-                                const mappedfiles = values.map((value) => {
-                                    const ext = path.extname(value.path);
-                                    if (ext === '.png') {
-                                        return value;
-                                    }
-                                });
-
-                                const pngfiles = [];
-
-                                mappedfiles.forEach((mappedfile) => {
-                                    if (mappedfile != undefined) {
-                                        pngfiles.push(mappedfile);
-                                    }
-                                });
-
-                                setfiles(pngfiles);
-
-                                const images = await Promise.all(pngfiles.map(async (file) => {
-                                    if (file) {
-                                        const uint8Array = Array.from<number>(new Uint8Array(await file.arrayBuffer()));
-                                        let encodedStr = '';
-
-                                        for (let i = 0; i < uint8Array.length; i += 1024) {
-                                            encodedStr += String.fromCharCode.apply(
-                                                null, uint8Array.slice(i, i + 1024)
-                                            );
-                                        }
-
-                                        const base64 = window.btoa(encodedStr);
-
-                                        let info = imageInfo(base64);
-
-                                        return {
-                                            name: file.name,
-                                            data: `data:image/png;base64,${base64}`,
-                                            width: info.width
-                                        };
-                                    }
-                                }));
-
-                                const json: VerticalAPIRequest = {
-                                    data: images,
-                                    length: images?.length,
-                                    width: images[0]?.width ?? 16,
-                                };
-
-                                setjsondata(json);
+                            {!(loading) ? <Dropzone openRef={openRef} onDrop={(value) => {
+                                onfilesdrop(value, files, isadd);
                             }}>
                                 <Paper shadow="xs" p="xl">
                                     Drag images here or click to select files
@@ -92,8 +95,8 @@ export default function PageForm() {
                         </div>
 
                         <SendURL visible={loading} />
-                        {(files && !files.includes(undefined)) ? <Paper shadow="xs" p="xl">
-                            <ScrollArea h={400}>
+                        {((files && !files.includes(undefined)) || (pngfiles.length != 0 && !pngfiles.includes(undefined))) ? <Paper shadow="xs" p="xl">
+                            <ScrollArea h={300}>
                                 <LoadingOverlay visible={visible} zIndex={1000} overlayProps={{ radius: "sm", blur: 2 }} />
                                 <ul>{fileList(files)}</ul>
                             </ScrollArea>
@@ -110,11 +113,15 @@ export default function PageForm() {
                     </CopyButton>
 
                     <Button data-disabled={(loading || (files == undefined || files.includes(undefined)))} color='red' onClick={() => {
+                        setpngfiles([]);
                         setfiles(undefined);
                         setjsondata(undefined);
                     }}>Clear files</Button>
 
-                    <Button data-disabled={loading} color='blue' onClick={() => openRef.current?.()}>Select files</Button>
+                    <Button data-disabled={loading} color='blue' onClick={() => {
+                        setadd(true);
+                        openRef.current?.();
+                    }}>Add files</Button>
 
                     <Button color='green' data-disabled={(loading || (files == undefined || files.includes(undefined)))} onClick={(!loading && files) ? () => {
                         setloading(true);
